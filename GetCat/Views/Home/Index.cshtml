@@ -1,0 +1,65 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Cats!</h1>
+
+    <div><button id="more-cat">MOAR CAT</button></div>
+
+    <img id="cat-image" />
+    <video id="cat-video" controls />
+
+    <style>
+        img {
+            max-width: 400px;
+            display: none;
+        }
+
+        video {
+            max-width: 400px;
+            display: none;
+        }
+
+        #more-cat {
+            margin-bottom: 2em;
+        }
+    </style>
+
+    <script>
+        const imgCat = document.querySelector('#cat-image');
+        const vidCat = document.querySelector('#cat-video');
+        const moreCat = document.querySelector('#more-cat');
+
+
+        function getCat() {
+            fetch('https://aws.random.cat/meow')
+                .then(response => response.json())
+                .then(data => {
+                    //  get file extension
+                    const urlParts = data.file.split('.');
+                    const extension = urlParts[urlParts.length - 1];
+
+                    //  display either image or video
+                    if (extension === "mp4") {
+                        vidCat.src = data.url;
+                        imgCat.style.display = 'none';
+                        vidCat.style.display = 'inline-block';
+                    } else {
+                        imgCat.src = data.file;
+                        vidCat.style.display = 'none';
+                        imgCat.style.display = 'inline-block';
+                    }
+                });
+        }
+
+
+        moreCat.addEventListener('click', () => {
+            getCat();
+        })
+
+
+        getCat();
+
+    </script>
+</div>
